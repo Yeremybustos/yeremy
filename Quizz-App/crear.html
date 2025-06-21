@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Crear Cuestionario</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>Agregar pregunta</h2>
+
+  <input id="pregunta" placeholder="Pregunta" />
+  <input id="op1" placeholder="Opción 1" />
+  <input id="op2" placeholder="Opción 2" />
+  <input id="op3" placeholder="Opción 3" />
+  <input id="op4" placeholder="Opción 4" />
+  <select id="correcta">
+    <option value="0">Opción 1 correcta</option>
+    <option value="1">Opción 2 correcta</option>
+    <option value="2">Opción 3 correcta</option>
+    <option value="3">Opción 4 correcta</option>
+  </select>
+
+  <button onclick="agregar()">Agregar pregunta</button>
+  <button onclick="redirigir()">Contestar preguntas</button>
+
+  <div id="contador"></div>
+
+  <script>
+    let preguntas = [];
+
+    function agregar() {
+      const pregunta = document.getElementById("pregunta").value.trim();
+      const opciones = [
+        document.getElementById("op1").value.trim(),
+        document.getElementById("op2").value.trim(),
+        document.getElementById("op3").value.trim(),
+        document.getElementById("op4").value.trim()
+      ];
+      const correcta = parseInt(document.getElementById("correcta").value);
+
+      if (pregunta && opciones.every(op => op !== "")) {
+        preguntas.push({ pregunta, opciones, correcta });
+
+        // Limpiar campos
+        document.getElementById("pregunta").value = "";
+        document.getElementById("op1").value = "";
+        document.getElementById("op2").value = "";
+        document.getElementById("op3").value = "";
+        document.getElementById("op4").value = "";
+        document.getElementById("correcta").value = "0";
+
+        document.getElementById("contador").textContent = `Preguntas agregadas: ${preguntas.length}`;
+        document.getElementById("pregunta").focus();
+      } else {
+        alert("Por favor completa todos los campos antes de agregar.");
+      }
+    }
+
+    function redirigir() {
+      if (preguntas.length === 0) {
+        alert("Agrega al menos una pregunta antes de continuar.");
+        return;
+      }
+
+      const data = encodeURIComponent(btoa(JSON.stringify(preguntas)));
+      const url = `responder.html?data=${data}`;
+      window.location.href = url;
+    }
+  </script>
+</body>
+</html>
